@@ -1,23 +1,21 @@
-import React, { Suspense, useState, useRef, useEffect } from 'react';
+import React, { Suspense, useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import "./index.css";
 import {
-    CameraControls,
-  OrbitControls,
-  PerspectiveCamera,
+    CameraControls
 } from "@react-three/drei";
 import { Ground } from './Ground';
 import { Heart } from './Heart';
 import { MeshReflectorMaterial } from "@react-three/drei";
 import { useAtom } from 'jotai';
 import { UI, currentPageAtom } from './components/UI';
-
+import Loader from './components/Loader';
+import { degToRad } from "three/src/math/MathUtils";
 
 
 function BoxShow() {
     
     const controls = useRef();
-    const meshFitCameraHome = useRef();
     const meshFitCameraTitle = useRef();
     const meshFitCameraSecond = useRef();
     const [currentPage, setCurrentPage] = useAtom(currentPageAtom);
@@ -37,10 +35,12 @@ function BoxShow() {
         }
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         intro();
     }, [])
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (currentPage === 'intro') {
 
@@ -115,7 +115,7 @@ function BoxShow() {
                 html
                 title={"Happy Valentine's Day"}
                 description={
-                    "В этот прекрасный день любви хочу поделиться с тобой всем своим восхищением и благодарностью за то, что ты есть в моей жизни. Ты делаешь ее особенной и невероятной. Пусть наша любовь будет столь же крепкой, как дуб, и столь же нежной, как лепестки розы. С любовью в День Святого Валентина!"
+                    "Я никогда не отмечал этот день, хотя немного подумав... Мы же сидели год назад в 427)) Можно сказать, прошел год с нашего 'знакомства'. И да, этот год подарил мне нового человека - тебя. Зная, что для тебя слова мало что значат, много писать не буду. Карин, я рад быть рядом с тобой и надеюсь, что этот год не единственный. Люблю тебя, прекрасная моя, независимая женщина."
                 }
                 />
 
@@ -126,20 +126,23 @@ function BoxShow() {
 }
 
 
+
+
 const App = () => {
 
   return (
-    <>
+    <div className='h-screen w-full bg-black'>
         <Canvas shadows enableRotate={false}  camera={{position: [5, 5, 5],
                 near: 0.01, 
                 far: 1000 
                 }}>
-            <Suspense fallback={null}>
+            <Suspense fallback={<Loader rotation-y={degToRad(45)}
+                                         />}>
                 <BoxShow />
             </Suspense>
         </Canvas>
         <UI/>
-    </>
+    </div>
   )
 }
 
